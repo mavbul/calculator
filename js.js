@@ -11,6 +11,8 @@ let start_new_enter = false;
 let result_global;
 let result_global_flag = false;
 let twoTimesOperatorPressed = true;
+let valueBuffer;
+let valueGlobal;
 
 const displayElem = document.getElementById('display_id');
 const lowerButtonsElem = document.querySelector('.lowerButtons'); 
@@ -87,19 +89,22 @@ function display(content) {
 //console.log(lowerButtonsElem);
 
 function lowerButtonsElemHandler(event) {
+    valueBuffer = valueGlobal;
+    valueGlobal = event.target.dataset.value;
+    
+    if (!valueGlobal) return;
+    
+    if (valueGlobal == '+' || valueGlobal == '-' || valueGlobal == '*' || valueGlobal == '/' || valueGlobal == '=') {
 
-    let value = event.target.dataset.value;
-    
-    if (!value) return;
-    
-    if (value == '+' || value == '-' || value == '*' || value == '/' || value == '=') {
+        if (valueBuffer == valueGlobal) return;
 
         if (!number_1_global_flag) {
+            if (valueGlobal == '=') return;
             number_1_global = displayValue;
             number_1_global_flag = true;  
             start_new_enter = true; 
-            if (value != '=') {
-                operator_global = value;
+            if (valueGlobal != '=') {
+                operator_global = valueGlobal;
             }
             twoTimesOperatorPressed = true;
             return;
@@ -113,22 +118,24 @@ function lowerButtonsElemHandler(event) {
             displayValue = result_global;
             number_1_global = result_global;
             start_new_enter = true; 
-            if (value != '=') {
-                operator_global = value;            
+            if (valueGlobal != '=') {
+                operator_global = valueGlobal;        
+            } else {
+                number_1_global_flag = false;
             }
             twoTimesOperatorPressed = true;
             display(displayValue);
             return;
         }
 
-        if (value != '=') {
-            operator_global = value;            
+        if (valueGlobal != '=') {
+            operator_global = valueGlobal;            
         }
         return;
     } 
 
   
-    display(displayContent(value));
+    display(displayContent(valueGlobal));
     number_2_global_flag = false;
     result_global_flag = false;
     twoTimesOperatorPressed = false;
